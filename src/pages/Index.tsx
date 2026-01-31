@@ -3,7 +3,6 @@ import { toast } from "sonner";
 import Navbar from "@/components/ui/Navbar";
 import HeroSection from "@/components/sections/HeroSection";
 import ActionsSection from "@/components/sections/ActionsSection";
-import HowItWorksSection from "@/components/sections/HowItWorksSection";
 import FeaturesSection from "@/components/sections/FeaturesSection";
 import FooterSection from "@/components/sections/FooterSection";
 import SearchResults from "@/components/SearchResults";
@@ -57,7 +56,6 @@ const Index = () => {
         onReportFound={handleReportFound}
         onClaimItem={handleClaimItem}
       />
-      <HowItWorksSection />
       <FeaturesSection />
       <FooterSection />
     </div>

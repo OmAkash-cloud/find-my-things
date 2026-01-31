@@ -1,4 +1,4 @@
-import { ArrowLeft, MapPin, Clock, Tag } from "lucide-react";
+import { ArrowLeft, MapPin, Calendar, Tag, AlertCircle } from "lucide-react";
 
 interface SearchResultsProps {
   query: string;
@@ -6,96 +6,127 @@ interface SearchResultsProps {
 }
 
 const SearchResults = ({ query, onBack }: SearchResultsProps) => {
-  // Mock empty results - in real app, this would come from backend
-  const results: Array<{
-    id: string;
-    name: string;
-    description: string;
-    location: string;
-    time: string;
-    matchScore: number;
-    image?: string;
-  }> = [];
+  // Mock results - in real app, this would come from API/database
+  const mockResults = [
+    {
+      id: 1,
+      title: "Black Leather Wallet",
+      description: "Found near Central Park entrance. Contains some cards.",
+      location: "Central Park, NYC",
+      date: "2 hours ago",
+      category: "Wallet",
+      matchScore: 92,
+    },
+    {
+      id: 2,
+      title: "Brown Bifold Wallet",
+      description: "Discovered at subway station. Has initials J.D.",
+      location: "Times Square Station",
+      date: "5 hours ago",
+      category: "Wallet",
+      matchScore: 78,
+    },
+    {
+      id: 3,
+      title: "Navy Blue Wallet",
+      description: "Left at coffee shop counter. Contains ID.",
+      location: "Starbucks, 5th Ave",
+      date: "1 day ago",
+      category: "Wallet",
+      matchScore: 65,
+    },
+  ];
 
   return (
-    <div className="min-h-screen bg-background pt-20">
+    <div className="min-h-screen bg-background pt-24">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-12">
           <button
             onClick={onBack}
-            className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-4"
+            className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 font-bold transition-colors"
           >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Home
+            <ArrowLeft className="w-5 h-5" />
+            BACK TO HOME
           </button>
           
-          <h1 className="font-display text-3xl font-bold text-foreground mb-2">
-            Search Results
-          </h1>
-          <p className="text-muted-foreground">
-            Showing matches for: <span className="text-foreground font-medium">"{query}"</span>
-          </p>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div>
+              <div className="inline-block px-4 py-2 bg-primary brutal-border brutal-shadow-sm mb-4">
+                <span className="font-display text-sm">SEARCH RESULTS</span>
+              </div>
+              <h1 className="font-display text-4xl sm:text-5xl md:text-6xl text-foreground">
+                SHOWING MATCHES FOR
+              </h1>
+              <p className="font-display text-3xl sm:text-4xl text-primary mt-2">"{query.toUpperCase()}"</p>
+            </div>
+            <div className="flex items-center gap-3 px-4 py-3 bg-muted brutal-border">
+              <AlertCircle className="w-5 h-5 text-accent" />
+              <span className="text-sm font-bold">{mockResults.length} POTENTIAL MATCHES</span>
+            </div>
+          </div>
         </div>
 
-        {/* Results */}
-        {results.length > 0 ? (
-          <div className="grid gap-4">
-            {results.map((item) => (
-              <div
-                key={item.id}
-                className="p-6 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all hover:shadow-md"
-              >
-                <div className="flex gap-4">
-                  {item.image && (
-                    <div className="w-24 h-24 rounded-xl bg-muted flex-shrink-0 overflow-hidden">
-                      <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
-                    </div>
-                  )}
+        {/* Results grid */}
+        <div className="space-y-4">
+          {mockResults.map((result, index) => (
+            <div
+              key={result.id}
+              className="group bg-card brutal-border brutal-shadow hover-brutal p-6"
+            >
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div className="flex items-start gap-6">
+                  {/* Match score */}
+                  <div className="flex-shrink-0 w-20 h-20 bg-primary brutal-border flex flex-col items-center justify-center">
+                    <span className="font-display text-2xl text-primary-foreground">{result.matchScore}%</span>
+                    <span className="text-xs font-bold text-primary-foreground/70">MATCH</span>
+                  </div>
+                  
+                  {/* Item details */}
                   <div className="flex-1">
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <h3 className="font-display text-lg font-semibold text-foreground mb-1">
-                          {item.name}
-                        </h3>
-                        <p className="text-muted-foreground text-sm mb-3">{item.description}</p>
-                      </div>
-                      <div className="px-3 py-1 rounded-full bg-success/10 text-success text-sm font-medium">
-                        {item.matchScore}% Match
-                      </div>
-                    </div>
-                    <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-                      <span className="flex items-center gap-1">
-                        <MapPin className="w-4 h-4" />
-                        {item.location}
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="font-display text-xs px-2 py-1 bg-muted text-muted-foreground">
+                        #{String(index + 1).padStart(2, '0')}
                       </span>
-                      <span className="flex items-center gap-1">
-                        <Clock className="w-4 h-4" />
-                        {item.time}
+                      <span className="text-xs font-bold text-muted-foreground flex items-center gap-1">
+                        <Tag className="w-3 h-3" />
+                        {result.category.toUpperCase()}
+                      </span>
+                    </div>
+                    <h3 className="font-display text-2xl text-foreground mb-2">{result.title.toUpperCase()}</h3>
+                    <p className="text-muted-foreground text-sm mb-4">{result.description}</p>
+                    <div className="flex flex-wrap items-center gap-4 text-sm">
+                      <span className="flex items-center gap-1 text-muted-foreground">
+                        <MapPin className="w-4 h-4" />
+                        {result.location}
+                      </span>
+                      <span className="flex items-center gap-1 text-muted-foreground">
+                        <Calendar className="w-4 h-4" />
+                        {result.date}
                       </span>
                     </div>
                   </div>
                 </div>
+                
+                {/* Action button */}
+                <button className="px-6 py-3 bg-secondary text-secondary-foreground font-display text-lg brutal-border brutal-shadow-sm hover-brutal whitespace-nowrap">
+                  CLAIM THIS
+                </button>
               </div>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-20">
-            <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-muted flex items-center justify-center">
-              <Tag className="w-10 h-10 text-muted-foreground" />
             </div>
-            <h2 className="font-display text-2xl font-semibold text-foreground mb-3">
-              No matches found
-            </h2>
-            <p className="text-muted-foreground max-w-md mx-auto mb-8">
-              We couldn't find any items matching "{query}" in our database yet. 
-              Would you like to report it as lost so we can notify you when it's found?
-            </p>
-            <button className="px-6 py-3 bg-gradient-hero text-primary-foreground font-medium rounded-xl hover:opacity-90 transition-opacity shadow-md">
-              Report as Lost
-            </button>
-          </div>
-        )}
+          ))}
+        </div>
+
+        {/* No exact match CTA */}
+        <div className="mt-12 p-8 bg-muted brutal-border text-center">
+          <h3 className="font-display text-2xl mb-3">DON'T SEE YOUR ITEM?</h3>
+          <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+            Report your lost item and we'll notify you instantly when a match is found.
+          </p>
+          <button className="px-8 py-4 bg-primary text-primary-foreground font-display text-lg brutal-border brutal-shadow hover-brutal">
+            REPORT LOST ITEM
+          </button>
+        </div>
       </div>
     </div>
   );
